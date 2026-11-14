@@ -14,8 +14,8 @@ DASHBOARD = "https://nextleap.app/course-dashboard/nlcfsnyburhb9w7udwabt/overvie
 
 
 def is_recorded(title):
-    # Mentor sessions / Mentor Labs are live-only; everything else is recorded.
-    return not title.lower().startswith("mentor")
+    # Mentor Labs and Mock Interviews are live-only; everything else is recorded.
+    return not title.lower().startswith(("mentor", "mock interview"))
 
 
 def description(title):
