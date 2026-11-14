@@ -10,6 +10,21 @@ from datetime import date, datetime, timedelta, timezone
 CAL_NAME = "NextLeap"
 IST = timezone(timedelta(hours=5, minutes=30))
 SLOTS = {"AM": ((10, 30), (12, 30)), "PM": ((14, 0), (16, 0))}
+DASHBOARD = "https://nextleap.app/course-dashboard/nlcfsnyburhb9w7udwabt/overview"
+
+
+def is_recorded(title):
+    # Mentor sessions / Mentor Labs are live-only; everything else is recorded.
+    return not title.lower().startswith("mentor")
+
+
+def description(title):
+    rec = ("🎥 Recorded: Yes" if is_recorded(title)
+           else "🔴 Not recorded (live only)")
+    return (f"{rec}\n\n"
+            "Joining link: posted on the dashboard 30 mins before the session "
+            "(log in to view):\n"
+            f"{DASHBOARD}")
 
 # (date, slot, title)
 EVENTS = [
@@ -107,6 +122,9 @@ def build():
             f"DTSTART:{utc(d, start)}",
             f"DTEND:{utc(d, end)}",
             f"SUMMARY:{esc(title)}",
+            f"DESCRIPTION:{esc(description(title))}",
+            f"LOCATION:{esc(DASHBOARD)}",
+            f"URL:{DASHBOARD}",
             "STATUS:CONFIRMED",
             "END:VEVENT",
         ]
